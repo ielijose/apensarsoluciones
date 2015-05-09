@@ -24,7 +24,7 @@ Route::get('/', function()
 
 Route::get('/all', function()
 {
-	$soluciones = Solucion::all();	
+	$soluciones = Solucion::all();
 	return View::make('home.index', array('soluciones' => $soluciones, 'type' => 'all'));
 });
 
@@ -88,7 +88,26 @@ Route::get('/uploads', function()
 				}
 
 			}
-			
+
+		}
+	}
+});
+
+Route::get('/resize', function()
+{
+	if ($gestor = opendir('public/images/solutions')) {
+
+		while (false !== ($filename = readdir($gestor))) {
+			if(pathinfo ($filename, PATHINFO_EXTENSION) == 'png'){
+
+				$to = '/images/solutions/'.$filename;
+
+				if(!file_exists('public/images/solutions/thumbs/'.$filename)){
+					$img = Image::make('public/' . $to);
+					$img->resize(200, 200);
+					$img->save('public/images/solutions/thumbs/'.$filename, 50);
+				}
+			}
 		}
 	}
 });
@@ -104,14 +123,14 @@ Route::get('/counts', function()
 			array_push($counts, $solucion->cantidad);
 		}
 	}
-	
+
 	dd($counts);
 
 });
 
 Route::get('/count/{count}', function($count)
 {
-	
+
 	$soluciones = Solucion::where('cantidad','=',$count)->get();
 
 	foreach ($soluciones as $key => $solucion) {
