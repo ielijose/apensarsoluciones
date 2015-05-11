@@ -103,7 +103,7 @@ Route::get('/resize', function()
 				$to = '/images/solutions/'.$filename;
 
 				if(!file_exists(public_path() . '/images/solutions/thumbs/'.$filename)){
-					$img = Image::make('public/' . $to);
+					$img = Image::make(public_path() . $to);
 					$img->resize(200, 200);
 					$img->save(public_path() . '/images/solutions/thumbs/'.$filename, 50);
 				}
